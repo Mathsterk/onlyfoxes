@@ -8,10 +8,13 @@ function fetchFoxImages() {
             imageContainer.innerHTML = ''; // Clear previous images
 
             data.photos.forEach(photo => {
+                const imgWrapper = document.createElement('div');
                 const imgElement = document.createElement('img');
+                imgWrapper.className = "grid-item-wrapper";
                 imgElement.src = photo.src.medium;
                 imgElement.alt = photo.photographer;
-                imageContainer.appendChild(imgElement);
+                imgWrapper.appendChild(imgElement);
+                imageContainer.appendChild(imgWrapper);
             });
         })
         .catch(error => {
