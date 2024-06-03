@@ -1,0 +1,21 @@
+networks:
+  default:
+    external: true
+    name: traefik
+
+services:
+  onlyfoxes:
+    build: ./build
+    container_name: onlyfoxes
+    restart: unless-stopped
+    env_file:
+      onlyfox.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.onlyfoxes.rule=Host(`onlyfox.es`) || Host(`www.onlyfox.es`)"
+      - "traefik.http.routers.onlyfoxes.entrypoints=websecure"
+      - "traefik.http.routers.onlyfoxes.tls.certresolver=cloudflare"
+      - "traefik.http.routers.onlyfoxes-test.rule=Host(`onlyfoxes.mathsterk.net`)"
+      - "traefik.http.routers.onlyfoxes-test.entrypoints=websecure"
+      - "traefik.http.routers.onlyfoxes-test.tls.certresolver=le"
+#     - "traefik.http.services.onlyfoxes.loadbalancer.server.port=80"
