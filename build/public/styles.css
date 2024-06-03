@@ -20,16 +20,19 @@ h1 {
     margin-bottom: 20px;
 }
 
-#imageContainer {
-    column-count: 4;
-    column-gap: 10px;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
 }
 
-img {
+.grid-item {
     width: 100%;
-    margin-bottom: 10px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Darker shadow to match the dark background */
-    break-inside: avoid;
+    object-fit: cover;
+    display: block;
 }
 

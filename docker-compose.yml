@@ -9,7 +9,7 @@ services:
     container_name: onlyfoxes
     restart: unless-stopped
     env_file:
-      onlyfox.env
+      onlyfoxes.env
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.onlyfoxes.rule=Host(`onlyfox.es`) || Host(`www.onlyfox.es`)"
