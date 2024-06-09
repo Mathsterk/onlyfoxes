@@ -36,15 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error fetching images:', error);
                 isLoading = false;
-            data.photos.forEach(photo => {
-                const imgWrapper = document.createElement('div');
-                const imgElement = document.createElement('img');
-                imgWrapper.className = "grid-item-wrapper";
-                imgElement.className= "grid-item";
-                imgElement.src = photo.src.medium;
-                imgElement.alt = photo.photographer;
-                imgWrapper.appendChild(imgElement);
-                imageContainer.appendChild(imgWrapper);
             });
     }
 
