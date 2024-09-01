@@ -10,6 +10,8 @@ services:
     restart: unless-stopped
     env_file:
       onlyfoxes.env
+    volumes:
+      - ./cache:/cache
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.onlyfoxes.rule=Host(`onlyfox.es`) || Host(`www.onlyfox.es`)"

@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 shuffledPhotos.forEach(photo => {
                     const imgElement = document.createElement('img');
-                    imgElement.src = `/image-proxy?url=${encodeURIComponent(photo.src.medium)}`;
+                    // Use the locally cached image path
+                    imgElement.src = `/image_cache/${photo.id}.jpg`;
                     imgElement.alt = photo.photographer;
                     imgElement.loading = 'lazy';
                     imgElement.classList.add('grid-item');
