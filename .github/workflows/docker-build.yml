@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set Docker tag based on the branch or pull request
+      # Set Docker tag based on the branch or pull request, convert to lowercase
       - name: Set Docker tag
         id: docker_tag
         run: |
@@ -25,17 +25,19 @@ jobs:
             echo "DOCKER_TAG=pull-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
           else
             echo "DOCKER_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
-          fi
+          
+          # Ensure the Docker tag is lowercase
+          echo "DOCKER_TAG=$(echo ${{ env.DOCKER_TAG }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       # Log in to GitHub's Container Registry
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Build the Docker image
+      # Build the Docker image (repository name and tag must be lowercase)
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/onlyfoxes:${{ env.DOCKER_TAG }} ./build
+          docker build -t ghcr.io/${{ github.repository | toLowerCase }}/your-image-name:${{ env.DOCKER_TAG }} ./build
 
       # Push the Docker image to GitHub Container Registry
       - name: Push Docker image to GitHub Container Registry
-        run: docker push ghcr.io/${{ github.repository }}/onlyfoxes:${{ env.DOCKER_TAG }}
+        run: docker push ghcr.io/${{ github.repository | toLowerCase }}/your-image-name:${{ env.DOCKER_TAG }}
