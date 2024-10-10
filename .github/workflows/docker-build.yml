@@ -7,7 +7,6 @@ on:
   pull_request:
     branches:
       - '*'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,6 +24,7 @@ jobs:
             echo "DOCKER_TAG=pull-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
           else
             echo "DOCKER_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
           
           # Ensure the Docker tag is lowercase
           echo "DOCKER_TAG=$(echo ${{ env.DOCKER_TAG }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
@@ -36,8 +36,11 @@ jobs:
       # Build the Docker image (repository name and tag must be lowercase)
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository | toLowerCase }}/your-image-name:${{ env.DOCKER_TAG }} ./build
+          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          docker build -t ghcr.io/${REPO_NAME}/your-image-name:${{ env.DOCKER_TAG }} ./build
 
       # Push the Docker image to GitHub Container Registry
       - name: Push Docker image to GitHub Container Registry
-        run: docker push ghcr.io/${{ github.repository | toLowerCase }}/your-image-name:${{ env.DOCKER_TAG }}
+        run: |
+          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          docker push ghcr.io/${REPO_NAME}/your-image-name:${{ env.DOCKER_TAG }}
