@@ -34,8 +34,8 @@ jobs:
       # Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/your-image-name:${{ env.DOCKER_TAG }} ./build
+          docker build -t ghcr.io/${{ github.repository }}/onlyfoxes:${{ env.DOCKER_TAG }} ./build
 
       # Push the Docker image to GitHub Container Registry
       - name: Push Docker image to GitHub Container Registry
-        run: docker push ghcr.io/${{ github.repository }}/your-image-name:${{ env.DOCKER_TAG }}
+        run: docker push ghcr.io/${{ github.repository }}/onlyfoxes:${{ env.DOCKER_TAG }}
