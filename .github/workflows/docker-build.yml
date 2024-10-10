@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - '*'
+  workflow_dispatch:  # This allows manual triggering of the workflow
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,32 +18,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set Docker tag based on the branch or pull request, convert to lowercase, default to 'latest' if empty
+      # Set Docker tag to 'latest' if manually triggered or if building the main branch
       - name: Set Docker tag
         id: docker_tag
         run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" || "${{ github.ref_name }}" == "main" ]]; then
+            echo "DOCKER_TAG=latest" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "DOCKER_TAG=pull-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
           else
-            # Use branch name as Docker tag, but default to 'latest' if the branch is 'main'
-            if [[ "${{ github.ref_name }}" == "main" ]]; then
-              echo "DOCKER_TAG=latest" >> $GITHUB_ENV
-            else
-              echo "DOCKER_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
-            fi
+            echo "DOCKER_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
           fi
           
           # Ensure the Docker tag is lowercase
           echo "DOCKER_TAG=$(echo ${{ env.DOCKER_TAG }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-          
-          # If DOCKER_TAG is empty, default to 'latest'
-          if [ -z "${{ env.DOCKER_TAG }}" ]; then
-            echo "DOCKER_TAG=latest" >> $GITHUB_ENV
-          fi
 
-      # Log in to GitHub's Container Registry
+      # Log in to GitHub's Container Registry using PAT
       - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       # Build the Docker image (repository name and tag must be lowercase)
       - name: Build Docker image
