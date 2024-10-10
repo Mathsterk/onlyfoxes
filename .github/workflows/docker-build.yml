@@ -37,10 +37,10 @@ jobs:
       - name: Build Docker image
         run: |
           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          docker build -t ghcr.io/${REPO_NAME}/your-image-name:${{ env.DOCKER_TAG }} ./build
+          docker build -t ghcr.io/${REPO_NAME}/onlyfoxes:${{ env.DOCKER_TAG }} ./build
 
       # Push the Docker image to GitHub Container Registry
       - name: Push Docker image to GitHub Container Registry
         run: |
           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          docker push ghcr.io/${REPO_NAME}/your-image-name:${{ env.DOCKER_TAG }}
+          docker push ghcr.io/${REPO_NAME}/onlyfoxes:${{ env.DOCKER_TAG }}
