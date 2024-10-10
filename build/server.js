@@ -65,6 +65,30 @@ async function fetchImagesFromAPI(query, page = 1) {
     return response.data.photos;
 }
 
+// Healthcheck endpoint to verify the server is running
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'UP' });
+});
+
+// Readiness endpoint to check the availability of necessary dependencies
+app.get('/ready', (req, res) => {
+    try {
+        // Check if exclusions file is readable
+        fs.accessSync('exclusions.json', fs.constants.R_OK);
+
+        // Check if the PEXELS_API_KEY is set
+        if (!PEXELS_API_KEY) {
+            throw new Error('PEXELS_API_KEY is missing');
+        }
+
+        // If no issues, return readiness status
+        res.status(200).json({ status: 'READY' });
+    } catch (error) {
+        console.error('Readiness check failed:', error);
+        res.status(500).json({ status: 'NOT_READY', error: error.message });
+    }
+});
+
 app.get('/', async (req, res) => {
     try {
         const exclusions = readExclusions();
