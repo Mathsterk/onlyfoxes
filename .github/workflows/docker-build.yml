@@ -33,9 +33,10 @@ jobs:
           # Ensure the Docker tag is lowercase
           echo "DOCKER_TAG=$(echo ${{ env.DOCKER_TAG }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
-      # Log in to GitHub's Container Registry using PAT
+      # Log in to GitHub's Container Registry using the GITHUB_TOKEN
       - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
 
       # Build the Docker image (repository name and tag must be lowercase)
       - name: Build Docker image
