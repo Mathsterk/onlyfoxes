@@ -1,0 +1,41 @@
+name: Build and Push Docker Image to GitHub Container Registry
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set Docker tag based on the branch or pull request
+      - name: Set Docker tag
+        id: docker_tag
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "DOCKER_TAG=pull-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+          else
+            echo "DOCKER_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
+
+      # Log in to GitHub's Container Registry
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/your-image-name:${{ env.DOCKER_TAG }} ./build
+
+      # Push the Docker image to GitHub Container Registry
+      - name: Push Docker image to GitHub Container Registry
+        run: docker push ghcr.io/${{ github.repository }}/your-image-name:${{ env.DOCKER_TAG }}
