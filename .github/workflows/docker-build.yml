@@ -33,6 +33,11 @@ jobs:
           
           # Ensure the Docker tag is lowercase
           echo "DOCKER_TAG=$(echo ${{ env.DOCKER_TAG }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          
+          # If DOCKER_TAG is empty, default to 'latest'
+          if [ -z "${{ env.DOCKER_TAG }}" ]; then
+            echo "DOCKER_TAG=latest" >> $GITHUB_ENV
+          fi
 
       # Log in to GitHub's Container Registry
       - name: Log in to GitHub Container Registry
