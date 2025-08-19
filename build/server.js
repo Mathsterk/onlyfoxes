@@ -105,7 +105,6 @@ app.get('/', async (req, res) => {
                 <div class="container">
                     <h1>Only Foxes</h1>
                     <div id="imageContainer" class="grid">
-                        <img src="/image_cache/${randomImage.id}.jpg" alt="Fox Image">
                     </div>
                 </div>
                 <script src="script.js"></script>
@@ -144,4 +143,3 @@ if (!fs.existsSync(IMAGE_CACHE_DIR)) {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
