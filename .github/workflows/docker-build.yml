@@ -20,7 +20,7 @@ jobs:
     steps:
       # Checkout the repository code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       # Set Docker tag to 'latest' if manually triggered or if building the main branch
       - name: Set Docker tag
