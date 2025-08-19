@@ -11,7 +11,7 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "docker" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: "/build" # Location of package manifests
     schedule:
       interval: "weekly"
 
