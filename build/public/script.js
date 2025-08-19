@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const imgElement = document.createElement('img');
                     // Use the locally cached image path
                     imgElement.src = `/image_cache/${photo.id}.jpg`;
-                    imgElement.alt = photo.photographer;
+                    imgElement.title = photo.photographer;
                     imgElement.loading = 'lazy';
                     imgElement.classList.add('grid-item');
                     fragment.appendChild(imgElement);
@@ -59,4 +59,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchFoxImages(); // Initial load
 });
-
