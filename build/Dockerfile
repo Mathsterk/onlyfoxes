@@ -1,5 +1,5 @@
 # Use the official Node.js 22 image as a base
-FROM node:24
+FROM node:25
 
 # Create and change to the app directory
 WORKDIR /usr/src/app
